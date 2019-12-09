@@ -11,9 +11,13 @@ RoxygenNote: 7.0.2
 Depends:
     R (>= 3.0.2)
 Imports:
-    EPIC
+    EPIC,
+    e1071,
+    parallel,
+    preprocessCore
 Suggests:
-    testthat,
     knitr,
-    rmarkdown
+    devtools,
+    roxygen2,
+    testthat
 VignetteBuilder: knitr
