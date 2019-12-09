@@ -28,13 +28,14 @@ CTdeconv <- function(mix,RNAseq=F,filename=NULL) {
   # lm6='.gg/signature_rnaseq_geo60424_LM6.txt'
   # lm22='.gg/LM22.txt'
   # mix='.gg/examplemixture.TXT'
-  # RNASeq=F
+  # RNAseq=F
   if(isSingleString(mix)) mix=read.delim(mix,row.names = 1,check.names = F)
   mix=data.matrix(mix)
   ref='BRef'
+  # require('EPIC')
   epicRes=EPIC(mix,ref)
   epicRes=epicRes[['mRNAProportions']]
-  qn=!RNASeq
+  qn=!RNAseq
   cib_lm6_res=CIBERSORT(lm6,mix,QN=qn)
   cib_lm22_res=CIBERSORT(lm22,mix,QN=qn)
   cename=list(B=c('B cells naive','B cells memory',"Bcells","B cells"),
@@ -61,5 +62,4 @@ CTdeconv <- function(mix,RNAseq=F,filename=NULL) {
   }
   return(res)
 }
-
 

@@ -9,7 +9,7 @@
 
 }
 \usage{
-data(lm22)
+
 }
 \description{
 Signatures of 22 celltypes. It is provided by Cibersort.

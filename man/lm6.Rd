@@ -9,7 +9,7 @@
 
 }
 \usage{
-data(lm6)
+
 }
 \description{
 Signatures of six celltypes. It is provided by Cibersort.

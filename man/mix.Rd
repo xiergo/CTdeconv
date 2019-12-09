@@ -9,7 +9,7 @@
 
 }
 \usage{
-data(mix)
+
 }
 \description{
 The expression profiles of 5 mixtures. It is just a example data.

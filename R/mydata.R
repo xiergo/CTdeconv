@@ -4,7 +4,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(lm6)
+#' @usage
 #'
 #' @format A matrix.
 #'
@@ -24,7 +24,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(lm22)
+#' @usage
 #'
 #' @format A matrix.
 #'
@@ -44,7 +44,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(mix)
+#' @usage
 #'
 #' @format A matrix.
 #'
