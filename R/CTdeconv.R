@@ -1,3 +1,13 @@
+#' CTdeconv: A immune cell types deconvolution method.
+#'
+#' @docType package
+#' @name CTdeconv
+#' @import EPIC
+#' @import preprocessCore
+#' @import e1071
+#' @import parallel
+NULL
+
 
 #' Cell types deconvolution
 #'
@@ -16,6 +26,11 @@
 #' @param filename A string indecates the path of the file to be saved. If NULL (default),
 #' no file will be saved.
 #'
+#' @param cibersortPath Path to cibersort R script. CIBERSORT is freely available
+#' to academic users. Cibersort source script can be obtained
+#' from \url{https://cibersort.stanford.edu}.
+#'
+#'
 #' @return A matrix (m Samples * 6 Celltypes). It provides the proprotions of
 #' six cell types in the bulk samples. Note that the proportion is relative since we
 #' conduct a normalization to make the sum of proportions in each sample be one.
@@ -23,8 +38,10 @@
 #' @export
 #'
 #' @examples
-#' res=CTdeconv(mix)
-CTdeconv <- function(mix,RNAseq=F,filename=NULL) {
+#' # You need to provide path to CIBERSORT.R
+#' path='D:/Users/xiergo/Documents/CIBERSORT.R'
+#' res=CTdeconv(mix,cibersortPath=path)
+CTdeconv <- function(mix,cibersortPath,RNAseq=F,filename=NULL) {
   # lm6='.gg/signature_rnaseq_geo60424_LM6.txt'
   # lm22='.gg/LM22.txt'
   # mix='.gg/examplemixture.TXT'
@@ -36,8 +53,17 @@ CTdeconv <- function(mix,RNAseq=F,filename=NULL) {
   epicRes=EPIC(mix,ref)
   epicRes=epicRes[['mRNAProportions']]
   qn=!RNAseq
-  cib_lm6_res=CIBERSORT(lm6,mix,QN=qn)
-  cib_lm22_res=CIBERSORT(lm22,mix,QN=qn)
+  source(cibersortPath,local = T)
+
+  tmp_mix = tempfile()
+  tmp_lm6 = tempfile()
+  tmp_lm22 = tempfile()
+  write.mat(mix,tmp_mix)
+  write.mat(lm6,tmp_lm6)
+  write.mat(lm22,tmp_lm22)
+
+  cib_lm6_res=CIBERSORT(tmp_lm6,tmp_mix,QN=qn)
+  cib_lm22_res=CIBERSORT(tmp_lm22,tmp_mix,QN=qn)
   cename=list(B=c('B cells naive','B cells memory',"Bcells","B cells"),
               CD4=c('CD4_Tcells',"CD4 T cell",'CD4 T cells',"CD4.T.cells",
                            'T cells CD4 naive','T cells CD4 memory resting'),
@@ -63,3 +89,13 @@ CTdeconv <- function(mix,RNAseq=F,filename=NULL) {
   return(res)
 }
 
+write.mat=function(mat,file){
+  df=data.frame(ID=rownames(mat),mat,check.names = F)
+  write.table(df,file = file,row.names = F,sep='\t',quote = F)
+  return(NULL)
+}
+
+#single string detector
+isSingleString <- function(input) {
+  is.character(input) & length(input) == 1
+}

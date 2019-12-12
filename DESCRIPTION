@@ -11,16 +11,18 @@ LazyData: true
 RoxygenNote: 7.0.2
 URL: https://github.com/xiergo/CTdeconv
 Depends:
-    R (>= 3.0.2),
-    EPIC,
+    R (>= 3.0.2)
+Imports:
     preprocessCore,
     e1071,
-    parallel
+    parallel,
+    EPIC
 Suggests:
     knitr,
     devtools,
     roxygen2,
-    testthat
+    testthat,
+    rmarkdown
 VignetteBuilder: knitr
 Remotes:
     GfellerLab/EPIC
