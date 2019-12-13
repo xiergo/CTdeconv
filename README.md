@@ -19,8 +19,6 @@ In order to use CTdeconv, you will need to:
   4. Provide the Path to the R source code to the function `CTdeconv()` 
 
 
-RNAseq
-
 ```R
 # library(CTdeconv) ## Load the package or use CTdeconv::CTdeconv() directly.
 ciberPath <- 'D:/User/xiergo/Documents/CIBERSORT.R'
