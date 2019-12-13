@@ -44,7 +44,7 @@ outF <- 'D:/User/xiergo/Documents/CTdeconv_result.txt'
 res <- EPIC(mix = bulkSamplesMatrix, cibersortPath=ciberPath, RNAseq=T, filename=outF)
 ```
 
-Various other options are available and are well documented in the help pages from EPIC:
+Various other options are available and are well documented in the help pages from CTdeconv:
 ```R
 ?CTdeconv
 ```
