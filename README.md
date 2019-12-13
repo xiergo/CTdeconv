@@ -2,7 +2,7 @@
 
 ## Description
 
-CTdeconv wraps three agrithom-signature combinations, which has shown high performance in our benchmark datasets, to deconvolute the relative proportions of six major immune cell types, including B cell, CD4 T cell, CD8 T cell, NK cell, Mono/Macro and Neutrophil. 
+CTdeconv wraps three agrithom-signature combinations, which have shown high performance in our benchmark datasets, to deconvolute the relative proportions of six major immune cell types, including B cell, CD4 T cell, CD8 T cell, NK cell, Mono/Macro and Neutrophil. 
 
 
 ## Usage
