@@ -19,56 +19,56 @@ In order to use CTdeconv, you will need to:
   4. Provide the Path to the R source code to the function `CTdeconv()` 
 
 
+RNAseq
 
+```R
+# library(CTdeconv) ## Load the package or use CTdeconv::CTdeconv() directly.
+ciberPath <- 'D:/User/xiergo/Documents/CIBERSORT.R'
+res <- CTdeconv(mix = bulkSamplesMatrix, cibersortPath=ciberPath)
+```
+The bulk expression matrix can also be given as a path to a `.txt` file. In this file, the first row are sample IDs and the first column are gene symbols, and the seperator of each column is `'\t'`.
+```R
+bulkSampleFile <- 'D:/User/xiergo/Documents/bulkSampleExp.txt'
+res <- CTdeconv(mix = bulkSampleFile, cibersortPath=ciberPath)
+```
+If the platform of your expression data is RNA-Seq rather than macroarray, you need to set RNAseq=T. In this case, the quantile normalization will be skipped in Cibersort analysis process, which is recommended to disabled by the author of Cibersort (see CIBERSORT website http://cibersort.stanford.edu).
 
-# library(EPIC) ## If the package isn't loaded (or use EPIC::EPIC and so on).
-out <- EPIC(bulk = bulkSamplesMatrix)
-out <- EPIC(bulk = bulkSamplesMatrix, reference = referenceCellsList)
-out is a list containing the various mRNA and cell fractions in each samples as well as some data.frame of the goodness of fit.
+```R
+res <- EPIC(mix = bulkSamplesMatrix, cibersortPath=ciberPath, RNAseq=T)
+```
 
-Values of mRNA per cell and signature genes to use can also be changed:
+The output `res` is a matrix with six columns. Each row represents a sample and each column represents a celltype. It provides the proprotions of six cell types in the bulk samples. Note that the proportion is relative since we conduct a normalization to make the sum of proportions in each sample be one. You can save the results as a file conveniently just by providing `CTdeconv()` with an output file path:
 
-out <- EPIC(bulk = bulkSamplesMatrix, reference = referenceCellsList, mRNA_cell = mRNA_cell_vector, sigGenes = sigGenes_vector)
-out <- EPIC(bulk = bulkSamplesMatrix, reference = referenceCellsList, mRNA_cell_sub = mRNA_cell_sub_vector)
+```R
+outF <- 'D:/User/xiergo/Documents/CTdeconv_result.txt'
+res <- EPIC(mix = bulkSamplesMatrix, cibersortPath=ciberPath, RNAseq=T, filename=outF)
+```
+
 Various other options are available and are well documented in the help pages from EPIC:
+```R
+?CTdeconv
+```
+## Installation
 
-?EPIC::EPIC
-?EPIC::EPIC.package
-Installation
-install.packages("devtools")
-devtools::install_github("GfellerLab/EPIC", build_vignettes=TRUE)
-Web application
-EPIC is also available as a web application: http://epic.gfellerlab.org.
+CTdeconv is implemented as an R package, which can be installed from GitHub by:
+```R
+# install devtools if necessary
+install.packages('devtools')
 
-Python wrapper
-A pyhton wrapper has been written by Stephen C. Van Nostrand from MIT and is available at https://github.com/scvannost/epicpy.
+# install CTdeconv
+devtools::install_github('xiergo/CTdeconv')
 
-License
-EPIC can be used freely by academic groups for non-commercial purposes. The product is provided free of charge, and, therefore, on an "as is" basis, without warranty of any kind. Please read the file "LICENSE" for details.
+# load
+library(CTdeconv)
+```
 
-If you plan to use EPIC (version 1.1) in any for-profit application, you are required to obtain a separate license. To do so, please contact Ece Auffarth (eauffarth@licr.org) at the Ludwig Institute for Cancer Research Ltd.
+## License
+CTdeconv can be used freely by academic groups for non-commercial purposes. 
 
 Contact information
-Julien Racle (julien.racle@unil.ch), and David Gfeller (david.gfeller@unil.ch).
+Xie Yuhao (xyhao@bjmu.edu.cn)
 
-FAQ
-What do the "other cells" represent?
-EPIC predicts the proportions of the various cell types for which we have gene expression reference profiles (and corresponding gene signatures). But, depending on the bulk sample, it is possible that some other cell types are present for which we don't have any reference profile. EPIC returns the proportion of these remaining cells under the name "other cells". In the case of tumor samples, most of these other cells would certainly correspond to the cancer cells, but it could be that there are also some stromal cells or epithelial cells for example.
-I receive an error message "attempt to set 'colnames' on an object with less than two dimensions". What can I do?
-This is certainly that some of your data is a vector instead of a matrix. Please make sure that your bulk data is in the form of a matrix (and also your reference gene expression profiles if using custom ones).
-What is the meaning of the warning message telling that some mRNA_cell values are unknown?
-As described in our manuscript, EPIC first estimates the proportion of mRNA per cell type in the bulk and then it uses the fact that some cell types have more mRNA copies per cell than other to normalize this and obtain an estimate of the proportion of cells instead of mRNA (EPIC function returns both information if you need the one or the other). For this normalization we had either measured the amount of mRNA per cell or found it in the literature (fig. 1 – fig. supplement 2 of our paper). However we don’t currently have such values for the endothelial cells and CAFs. Therefore for these two cell types, we use an average value, which might not reflect their true value and this is the reason why we output this message. If you have some values for these mRNA/cell abundances, you can also add them into EPIC, with help of the parameter "mRNA_cell" or “mRNA_cell_sub” (and that would be great to share these values).
-
-If the mRNA proportions of these cell types are low, then even if you don't correct the results with their true mRNA/cell abundances, it would not really have a big impact on the results. On the other side, if there are many of these cells in your bulk sample, the results might be a little bit biased, but the effect should be similar for all samples and thus not have a too big importance (maybe you wouldn’t be fully able to tell if there are more CAFs than Tcells for example, but you should still have a good estimate of which sample has more CAFs (or Tcells) than which other sample for example).
-
-I receive a warning message that "the optimization didn't fully converge for some samples". What does it mean?
-When estimating the cell proportions EPIC performs a least square regression between the observed expression of the signature genes and the expression of these genes predicted based on the estimated proportions and gene expression reference profiles of the various cell types.
-
-When such a warning message appears, it means that the optimization didn’t manage to fully converge for this regression, for some of the samples. You can then check the "fit.gof$convergeCode" (and possibly also "fit.gof$convergeMessage") that is outputted by EPIC alongside the cell proportions. This will tell you which samples had issue with the convergence (a value of 0 means it converged ok, while other values are errors/warnings, their meaning can be found in the help of "optim" (or "constrOptim") function from R (from "stats" package) which is used during the optimization and we simply forward the message it returns).
-
-The error code that usually comes is a "1" which means that the maximum number of iterations has been reached in the optimization. This could mean there is an issue with the bulk gene expression data that maybe don’t completely follow the assumption of equation (1) from our manuscript. From our experience, it seems in practice that even when there was such a warning message the proportions were predicted well, it is maybe that the optimization just wants to be too precise, or maybe few of the signature genes didn’t match well but the rest of signature genes could be used to have a good estimate of the proportions.
-
-If you have some samples that seem to have strange results, it could however be useful to check that the issue is not that these samples didn’t converge well. To be more conservative you could also remove all the samples that didn't converge well as these are maybe outliers, if it is only a small fraction from your original samples. Another possibility would be to change the parameters of the optim/constrOptim function to allow for more iterations or maybe a weaker tolerance for the convergence, but for this you would need to tweak it directly in the code of EPIC, I didn't implement such option for EPIC.
+## FAQ
 
 Who should I contact in case of a technical or other issue?
-Julien Racle (julien.racle@unil.ch). Please provide as much details as possible and ideally send also an example input file (and/or reference profiles) that is causing the issue.
+Xie Yuhao (xyhao@bjmu.edu.cn). Please provide as much details as possible and ideally send also an example input file (and/or reference profiles) that is causing the issue.
