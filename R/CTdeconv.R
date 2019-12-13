@@ -2,9 +2,7 @@
 #'
 #' @docType package
 #' @name CTdeconv
-#' @import EPIC
 #' @import preprocessCore
-#' @import e1071
 #' @import parallel
 NULL
 
@@ -48,9 +46,9 @@ CTdeconv <- function(mix,cibersortPath,RNAseq=F,filename=NULL) {
   # RNAseq=F
   if(isSingleString(mix)) mix=read.delim(mix,row.names = 1,check.names = F)
   mix=data.matrix(mix)
-  ref='BRef'
+  ref=EPIC::BRef
   # require('EPIC')
-  epicRes=EPIC(mix,ref)
+  epicRes=EPIC::EPIC(mix,ref)
   epicRes=epicRes[['mRNAProportions']]
   qn=!RNAseq
   source(cibersortPath,local = T)
