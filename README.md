@@ -24,7 +24,7 @@ In order to use CTdeconv, you will need to:
 ciberPath <- 'D:/User/xiergo/Documents/CIBERSORT.R'
 res <- CTdeconv(mix = bulkSamplesMatrix, cibersortPath=ciberPath)
 ```
-The bulk expression matrix can also be given as a path to a `.txt` file. In this file, the first row are sample IDs and the first column are gene symbols, and the seperator of each column is `'\t'`.
+The bulk expression matrix can also be given as a path to a `.txt` file. In this file, the first row contains sample IDs and the first column are gene symbols, and the seperator of each column is `'\t'`.
 ```R
 bulkSampleFile <- 'D:/User/xiergo/Documents/bulkSampleExp.txt'
 res <- CTdeconv(mix = bulkSampleFile, cibersortPath=ciberPath)
