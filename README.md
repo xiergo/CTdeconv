@@ -32,7 +32,7 @@ res <- CTdeconv(mix = bulkSampleFile, cibersortPath=ciberPath)
 If the platform of your expression data is RNA-Seq rather than macroarray, you need to set RNAseq=T. In this case, the quantile normalization will be skipped in Cibersort analysis process, which is recommended to disabled by the author of Cibersort (see CIBERSORT website http://cibersort.stanford.edu).
 
 ```R
-res <- EPIC(mix = bulkSamplesMatrix, cibersortPath=ciberPath, RNAseq=T)
+res <- CTdeconv(mix = bulkSamplesMatrix, cibersortPath=ciberPath, RNAseq=T)
 ```
 
 The output `res` is a matrix with six columns. Each row represents a sample and each column represents a celltype. It provides the proprotions of six cell types in the bulk samples. Note that the proportion is relative since we conduct a normalization to make the sum of proportions in each sample be one.
@@ -41,7 +41,7 @@ You can save the results as a file conveniently just by providing `CTdeconv()` w
 
 ```R
 outF <- 'D:/User/xiergo/Documents/CTdeconv_result.txt'
-res <- EPIC(mix = bulkSamplesMatrix, cibersortPath=ciberPath, RNAseq=T, filename=outF)
+res <- CTdeconv(mix = bulkSamplesMatrix, cibersortPath=ciberPath, RNAseq=T, filename=outF)
 ```
 
 Various other options are available and are well documented in the help pages from CTdeconv:
