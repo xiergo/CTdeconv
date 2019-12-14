@@ -7,7 +7,7 @@ CTdeconv wraps three agrithom-signature combinations, which have shown high perf
 
 ## Usage
 
-The main function in this package is CTdeconv. It needs as input a matrix of the gene expression (from either RNA-seq or macroarray) of the samples for which to estimate cell proportions. Each column of expression matrix represents a sample and each row represents a gene.  Therefore, the rownames of the matrix are gene HGNC symbols while the colnames are sample IDs. 
+The main function in this package is `CTdeconv()`. It needs as input a matrix of the gene expression (from either RNA-seq or macroarray) of the samples for which to estimate cell proportions. Each column of expression matrix represents a sample and each row represents a gene.  Therefore, the rownames of the matrix are gene HGNC symbols while the colnames are sample IDs. 
 
 Some parts of CTdeconv analysis are based on CIBERSORT to estimate cell type proportions. However, we can not provide the source code for this algorithm due to the license requirements. So you need to download it from its website http://cibersort.stanford.edu seperately, which is released under the Stanford Non-Commercial License.
 
