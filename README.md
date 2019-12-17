@@ -24,16 +24,31 @@ In order to use CTdeconv, you will need to:
 ciberPath <- 'D:/User/xiergo/Documents/CIBERSORT.R'
 res <- CTdeconv(mix = bulkSamplesMatrix, cibersortPath=ciberPath)
 ```
+
+
 The bulk expression matrix can also be given as a path to a `.txt` file. In this file, the first row contains sample IDs and the first column are gene symbols, and the seperator of each column is `'\t'`.
+
 ```R
 bulkSampleFile <- 'D:/User/xiergo/Documents/bulkSampleExp.txt'
 res <- CTdeconv(mix = bulkSampleFile, cibersortPath=ciberPath)
 ```
-If the platform of your expression data is RNA-Seq rather than macroarray, you need to set RNAseq=T. In this case, the quantile normalization will be skipped in Cibersort analysis process, which is recommended to disabled by the author of Cibersort (see CIBERSORT website http://cibersort.stanford.edu).
+
+
+The default output is relative mRNA fraction coming from six immune cell types. If you want to get relative  cell fraction rather than mRNA fraction related to each cell type, you can set `cellFrac = T`, then a renormalization process will be performed on the mRNA proportion to account for different mRNA / cell values in different cell types, which is recommended in EPIC. In this way, the proportion of cells from each cell type will be returned.
+
+```R
+res <- CTdeconv(mix = bulkSampleFile, cibersortPath = ciberPath, cellFrac = T)
+```
+
+
+
+If the platform of your expression data is RNA-Seq rather than macroarray, you need to set `RNAseq = T`. In this case, the quantile normalization will be skipped in Cibersort analysis process, which is recommended to disabled by the author of Cibersort (see CIBERSORT website http://cibersort.stanford.edu).
 
 ```R
 res <- CTdeconv(mix = bulkSamplesMatrix, cibersortPath=ciberPath, RNAseq=T)
 ```
+
+
 
 The output `res` is a matrix with six columns. Each row represents a sample and each column represents a celltype. It provides the proprotions of six cell types in the bulk samples. Note that the proportion is relative since we conduct a normalization to make the sum of proportions in each sample be one.
 
@@ -44,7 +59,10 @@ outF <- 'D:/User/xiergo/Documents/CTdeconv_result.txt'
 res <- CTdeconv(mix = bulkSamplesMatrix, cibersortPath=ciberPath, RNAseq=T, filename=outF)
 ```
 
+
+
 All these available options are well documented in the help pages from CTdeconv:
+
 ```R
 ?CTdeconv
 ```

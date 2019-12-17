@@ -1,4 +1,4 @@
-#' CTdeconv: A immune cell types deconvolution method.
+#' CTdeconv: An immune cell-type deconvolution method.
 #'
 #' @docType package
 #' @name CTdeconv
@@ -14,20 +14,25 @@ NULL
 #' the relative proportions of six immune cell types in mixture samples.
 #'
 #' @param mix A matrix (n Genes * m Samples) of genes expression from bulk samples
-#' . It can be a string which specifies the path of a expression 'tsv' file. The rownames
-#' must be gene symbols and the colnames are the sample id.
-#
-#' @param RNAseq Logical. if TURE, the expression data is RNA-Seq data rather than
-#' Macroarray data, and the quantile normalization will not be done during Cibersort
-#' analysis process. The default is FALSE.
-#'
-#' @param filename A string indecates the path of the file to be saved. If NULL (default),
-#' no file will be saved.
+#' . It can be a string which specifies the path of a expression 'tsv' file. The
+#' rownames must be gene symbols and the colnames are the sample id.
 #'
 #' @param cibersortPath Path to cibersort R script. CIBERSORT is freely available
 #' to academic users. Cibersort source script can be obtained
 #' from \url{https://cibersort.stanford.edu}.
+#
+#' @param RNAseq Logical. If TURE, the expression data is RNA-Seq data rather than
+#' Macroarray data, and the quantile normalization will not be done during Cibersort
+#' analysis process. The default is FALSE.
 #'
+#' @param cellFrac Logical. If FALSE (default), the proportion of mRNA coming from each
+#'  cell type will be returned. If TRUE, a renormalization process will be performed on
+#'  the mRNA proportion to account for different mRNA / cell values in different cell types,
+#'  as is recommended in EPIC. In this way, the proportion of cells from each cell type
+#'  will be returned
+#'
+#' @param filename A string indecates the path of the file to be saved. If NULL (default),
+#' no file will be saved.
 #'
 #' @return A matrix (m Samples * 6 Celltypes). It provides the proprotions of
 #' six cell types in the bulk samples. Note that the proportion is relative since we
@@ -39,7 +44,7 @@ NULL
 #' # You need to provide path to CIBERSORT.R
 #' path='D:/Users/xiergo/Documents/CIBERSORT.R'
 #' res=CTdeconv(mix,cibersortPath=path)
-CTdeconv <- function(mix,cibersortPath,RNAseq=F,filename=NULL) {
+CTdeconv <- function(mix,cibersortPath,RNAseq=F,cellFrac=F,filename=NULL) {
   # lm6='.gg/signature_rnaseq_geo60424_LM6.txt'
   # lm22='.gg/LM22.txt'
   # mix='.gg/examplemixture.TXT'
@@ -80,6 +85,19 @@ CTdeconv <- function(mix,cibersortPath,RNAseq=F,filename=NULL) {
     y
   })
   res=Reduce('+',resls1)/length(resls1)
+  # print(res)
+  renormalize_vector=c(
+    'B'= 0.4016,
+    'CD4'= 0.3952,
+    'CD8'= 0.3952,
+    'NK'= 0.4396,
+    'Mono_Macro'= 1.4196,
+    'Neutro'= 0.1300)
+  if(cellFrac){
+    res=t(t(res)/renormalize_vector)
+    res=res/rowSums(res)
+  }
+  # print(res)
   if(!is.null(filename)){
     res1=data.frame(SampleId=rownames(res),res,check.names = F)
     write.table(res1,filename,row.names = F,sep='\t',quote = F)

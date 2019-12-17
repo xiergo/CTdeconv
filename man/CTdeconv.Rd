@@ -3,22 +3,28 @@
 \docType{package}
 \name{CTdeconv}
 \alias{CTdeconv}
-\title{CTdeconv: A immune cell types deconvolution method.}
+\title{CTdeconv: An immune cell-type deconvolution method.}
 \usage{
-CTdeconv(mix, cibersortPath, RNAseq = F, filename = NULL)
+CTdeconv(mix, cibersortPath, RNAseq = F, cellFrac = F, filename = NULL)
 }
 \arguments{
 \item{mix}{A matrix (n Genes * m Samples) of genes expression from bulk samples
-. It can be a string which specifies the path of a expression 'tsv' file. The rownames
-must be gene symbols and the colnames are the sample id.}
+. It can be a string which specifies the path of a expression 'tsv' file. The
+rownames must be gene symbols and the colnames are the sample id.}
 
 \item{cibersortPath}{Path to cibersort R script. CIBERSORT is freely available
 to academic users. Cibersort source script can be obtained
 from \url{https://cibersort.stanford.edu}.}
 
-\item{RNAseq}{Logical. if TURE, the expression data is RNA-Seq data rather than
+\item{RNAseq}{Logical. If TURE, the expression data is RNA-Seq data rather than
 Macroarray data, and the quantile normalization will not be done during Cibersort
 analysis process. The default is FALSE.}
+
+\item{cellFrac}{Logical. If FALSE (default), the proportion of mRNA coming from each
+cell type will be returned. If TRUE, a renormalization process will be performed on
+the mRNA proportion to account for different mRNA / cell values in different cell types,
+as is recommended in EPIC. In this way, the proportion of cells from each cell type
+will be returned}
 
 \item{filename}{A string indecates the path of the file to be saved. If NULL (default),
 no file will be saved.}
